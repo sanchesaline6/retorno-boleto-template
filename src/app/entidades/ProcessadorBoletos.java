@@ -9,10 +9,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class  ProcessadorBoletos {
+public class  ProcessadorBoletos {
+    private LeituraRetorno leituraRetorno;
 
-    public static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    public static final DateTimeFormatter FORMATO_DATA_HORA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    public ProcessadorBoletos(LeituraRetorno leituraRetorno) {
+        this.leituraRetorno = leituraRetorno;
+    }
     //método processar -> método template
     public final List<Boleto> processar(String nomeArquivo){
         try{
@@ -21,7 +23,7 @@ public abstract class  ProcessadorBoletos {
             List<Boleto> boletos = new ArrayList<>();
             while((line = reader.readLine()) != null){
                 String[] vetor = line.split(";");
-                Boleto boleto = processarLinhaArquivo(vetor);
+                Boleto boleto = leituraRetorno.processarLinhaArquivo(vetor);
                 boletos.add(boleto);
                 System.out.println(boleto);
             }
@@ -31,6 +33,4 @@ public abstract class  ProcessadorBoletos {
             throw new UncheckedIOException(e);
         }
     }
-
-    protected abstract Boleto processarLinhaArquivo(String[] vetor);
 }
